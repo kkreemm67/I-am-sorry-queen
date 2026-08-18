@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You ❤️</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:#0b0710;color:#fff;overflow-x:hidden;
+  font-family:Poppins,sans-serif;
+}
+canvas{position:fixed;inset:0;z-index:-2}
+body:before{
+  content:"";position:fixed;inset:0;z-index:-1;
+  background:
+    radial-gradient(circle at 20% 20%,rgba(255,73,135,.16),transparent 30%),
+    radial-gradient(circle at 80% 70%,rgba(146,61,255,.12),transparent 32%),
+    linear-gradient(135deg,#0b0710,#160916 55%,#09060e);
+}
+nav{
+  position:fixed;top:0;left:0;right:0;padding:20px 7%;
+  display:flex;justify-content:space-between;align-items:center;z-index:10;
+  background:linear-gradient(#0b0710cc,transparent);
+  backdrop-filter:blur(5px);
+}
+.logo{font-family:"Cormorant Garamond";font-size:27px;letter-spacing:2px}
+.heart{color:#ff4f91}
+.sound{
+  border:1px solid #ffffff30;background:#ffffff0b;color:white;border-radius:50px;
+  padding:10px 17px;cursor:pointer;transition:.3s
+}
+.sound:hover{background:#ffffff18;transform:translateY(-2px)}
+section{min-height:100vh;padding:120px 8% 80px;display:flex;align-items:center;justify-content:center}
+.hero{text-align:center;position:relative}
+.small{color:#ff87b5;letter-spacing:5px;text-transform:uppercase;font-size:12px;margin-bottom:25px}
+h1{
+  font-family:"Cormorant Garamond",serif;font-size:clamp(70px,12vw,150px);
+  line-height:.8;font-weight:500;
+  background:linear-gradient(90deg,#fff,#ffb1cd,#fff);
+  -webkit-background-clip:text;color:transparent;
+}
+.hero p{max-width:620px;margin:35px auto 0;color:#d6cbd3;line-height:1.9;font-size:16px}
+.scroll{margin-top:55px;color:#9f909c;font-size:12px;letter-spacing:3px}
+.card{
+  width:min(780px,100%);padding:55px 45px;border:1px solid #ffffff12;
+  background:linear-gradient(145deg,#ffffff0b,#ffffff03);
+  border-radius:30px;box-shadow:0 30px 100px #0008;backdrop-filter:blur(14px)
+}
+h2{font-family:"Cormorant Garamond";font-size:60px;font-weight:500;margin-bottom:25px}
+.text{color:#d9ced6;line-height:2;font-size:16px}
+.signature{font-family:"Cormorant Garamond";font-size:34px;color:#ffabc8;margin-top:35px}
+.memory-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;width:min(950px,100%)}
+.memory{
+  min-height:230px;border:1px solid #ffffff10;border-radius:25px;padding:28px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  background:linear-gradient(145deg,#ff4f9118,#ffffff05);
+  transition:.5s;cursor:pointer
+}
+.memory:hover{transform:translateY(-8px) rotate(-1deg);border-color:#ff5e9828}
+.memory span{font-size:12px;color:#ff86b2;letter-spacing:2px}
+.memory h3{font-family:"Cormorant Garamond";font-size:34px;margin-top:8px}
+.final{text-align:center}
+.final h2{font-size:clamp(55px,8vw,100px)}
+.btn{
+  margin-top:35px;padding:16px 30px;border:0;border-radius:50px;
+  background:#ff4f91;color:white;font-family:Poppins;font-size:14px;cursor:pointer;
+  box-shadow:0 12px 40px #ff4f9140;transition:.3s
+}
+.btn:hover{transform:scale(1.05);box-shadow:0 16px 50px #ff4f9160}
+
+/* Dedicated Second Page View */
+#forgive-page{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#0b0710;
+  z-index:100;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:20px;
+}
+.big-panda{
+  position:relative;
+  font-size:clamp(120px, 25vw, 220px);
+  line-height:1;
+  display:inline-block;
+  animation:floatPanda 3s ease-in-out infinite;
+}
+.panda-heart{
+  position:absolute;
+  font-size:0.35em;
+  bottom:15%;
+  left:50%;
+  transform:translateX(-50%);
+  animation:pulseHeart 1.5s ease-in-out infinite;
+}
+.panda-text{
+  font-family:"Cormorant Garamond", serif;
+  font-size:clamp(32px, 6vw, 55px);
+  color:#fff;
+  margin-top:30px;
+  letter-spacing:1px;
+}
+
+@keyframes floatPanda{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-15px)}
+}
+@keyframes pulseHeart{
+  0%,100%{transform:translateX(-50%) scale(1)}
+  50%{transform:translateX(-50%) scale(1.2)}
+}
+
+#toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);
+background:#fff;color:#170c14;padding:15px 25px;border-radius:30px;display:none;z-index:120}
+@media(max-width:700px){.memory-grid{grid-template-columns:1fr}.card{padding:35px 25px}h2{font-size:48px}}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+
+<div id="main-content">
+  <nav>
+    <div class="logo">for <span class="heart">you</span> ♡</div>
+    <button class="sound" onclick="toggleMusic()" id="musicBtn">♡ Play</button>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <div class="small">I made this instead of just saying "sorry"</div>
+      <h1>I'm Sorry.</h1>
+      <p>
+        I know a website can't magically fix everything.
+        I just wanted to make something that took more than a few seconds to say:
+        <b>I'm genuinely sorry.</b>
+      </p>
+      <div class="scroll">↓ keep going</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="card">
+      <div class="small">the part I need you to hear</div>
+      <h2>I did wrong stuff.</h2>
+      <div class="text">
+        Firstly, I'm sorry for everything. I never wanted things to reach that point,
+        and I really love you with all my heart. I never want to lose you.
+        I was honestly hoping that everything would get fixed, because I don't want
+        what happened between us to be the thing that pushes us apart.
+        <br><br>
+        I know saying sorry doesn't automatically make everything okay.
+        I just want you to know that I mean it, and that you mean so much to me.
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div>
+      <div class="small" style="text-align:center">things I don't say enough</div>
+      <div class="memory-grid">
+        <div class="memory"><span>01</span><h3>You matter to me.</h3></div>
+        <div class="memory"><span>02</span><h3>I notice the little things.</h3></div>
+        <div class="memory"><span>03</span><h3>I'm grateful to have you.</h3></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div>
+      <div class="small">one last thing</div>
+      <h2>Can we start<br>again? ♡</h2>
+      <p class="text" style="max-width:550px;margin:25px auto 0">
+        No pressure. No pretending nothing happened.
+        Just me hoping to have you again.
+      </p>
+      <div style="display:flex;gap:18px;justify-content:center;align-items:center;flex-wrap:wrap">
+        <button class="btn" id="yesBtn" onclick="sayYes()">Yes ❤️</button>
+        <button class="btn" id="noBtn" onclick="sayNo()" style="background:#ffffff12;box-shadow:none;border:1px solid #ffffff20">No</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Second Page Container -->
+<div id="forgive-page">
+  <div class="big-panda">
+    🐼
+    <span class="panda-heart">❤️</span>
+  </div>
+  <div class="panda-text">say six seven if u forgive me</div>
+</div>
+
+<div id="toast">I really mean it. ❤️</div>
+
+<script>
+const canvas=document.getElementById("stars"),ctx=canvas.getContext("2d");
+let w,h,stars=[];
+function resize(){
+  w=canvas.width=innerWidth;h=canvas.height=innerHeight;
+  stars=Array.from({length:110},()=>({x:Math.random()*w,y:Math.random()*h,
+  r:Math.random()*1.5+.2,s:Math.random()*.25+.05}));
+}
+function draw(){
+  ctx.clearRect(0,0,w,h);
+  for(const s of stars){
+    s.y-=s.s;if(s.y<0)s.y=h;
+    ctx.globalAlpha=.25+Math.random()*.5;
+    ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();
+  }
+  requestAnimationFrame(draw);
+}
+addEventListener("resize",resize);resize();draw();
+
+let noClicks=0;
+function sayNo(){
+  noClicks++;
+  const yes=document.getElementById("yesBtn");
+  const no=document.getElementById("noBtn");
+  const scale=Math.min(1+noClicks*.45,5);
+  yes.style.transform=`scale(${scale})`;
+  yes.style.zIndex="5";
+  no.textContent=noClicks<3?"No":"are you sure? 😭";
+}
+function sayYes(){
+  // Switch to the full page view
+  document.getElementById("main-content").style.display="none";
+  document.getElementById("forgive-page").style.display="flex";
+  
+  document.getElementById("toast").style.display="block";
+  document.getElementById("toast").textContent="I really mean it. ❤️";
+  setTimeout(()=>document.getElementById("toast").style.display="none",2800);
+
+  for(let i=0;i<45;i++){
+    const e=document.createElement("div");
+    e.innerHTML="♥";e.style.cssText=`position:fixed;left:${Math.random()*100}vw;top:100vh;
+    color:#ff5c98;font-size:${12+Math.random()*22}px;z-index:130;pointer-events:none;
+    transition:transform 2.5s ease,opacity 2.5s`;
+    document.body.appendChild(e);
+    requestAnimationFrame(()=>{e.style.transform=`translateY(-${80+Math.random()*100}vh) rotate(${Math.random()*360}deg)`;e.style.opacity="0"});
+    setTimeout(()=>e.remove(),2700);
+  }
+}
+let audioCtx,playing=false,interval;
+function toggleMusic(){
+  const btn=document.getElementById("musicBtn");
+  if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+  if(playing){clearInterval(interval);playing=false;btn.textContent="♡ Play";return}
+  playing=true;btn.textContent="♡ Playing";
+  let notes=[261.63,329.63,392,329.63,293.66,349.23,440,349.23],i=0;
+  interval=setInterval(()=>{
+    const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+    o.frequency.value=notes[i++%notes.length];o.type="sine";g.gain.setValueAtTime(.035,audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.8);o.connect(g).connect(audioCtx.destination);
+    o.start();o.stop(audioCtx.currentTime+.8)
+  },900);
+}
+</script>
+</body>
+</html>
